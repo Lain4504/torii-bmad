@@ -1,0 +1,57 @@
+# Workflow Status - Project Progress Tracking
+# Generated: 2026-01-02
+# Track: BMad Method (Brownfield)
+
+generated: "2026-01-02"
+project: "torii-nihongo"
+project_type: "Full Stack Microservices (NestJS/Flutter/Next.js)"
+selected_track: "bmad-method"
+field_type: "brownfield"
+workflow_path: "_bmad/bmm/workflows/workflow-status/paths/method-brownfield.yaml"
+
+workflow_status:
+  - phase: 0
+    name: "Documentation"
+    workflows:
+      - id: "document-project"
+        status: "bmad/docs/index.md"
+        command: "/bmad:bmm:workflows:document-project"
+  - phase: 1
+    name: "Analysis"
+    workflows:
+      - id: "brainstorm-project"
+        status: "skipped"
+      - id: "research"
+        status: "skipped"
+      - id: "product-brief"
+        status: "skipped"
+  - phase: 2
+    name: "Planning"
+    workflows:
+      - id: "prd"
+        status: "required"
+        command: "/bmad:bmm:workflows:create-prd"
+      - id: "create-ux-design"
+        status: "conditional"
+        command: "/bmad:bmm:workflows:create-ux-design"
+  - phase: 3
+    name: "Solutioning"
+    workflows:
+      - id: "create-architecture"
+        status: "required"
+        command: "/bmad:bmm:workflows:create-architecture"
+      - id: "create-epics-and-stories"
+        status: "required"
+        command: "/bmad:bmm:workflows:create-epics-and-stories"
+      - id: "test-design"
+        status: "optional"
+        command: "/bmad:bmm:workflows:test-design"
+      - id: "implementation-readiness"
+        status: "required"
+        command: "/bmad:bmm:workflows:implementation-readiness"
+  - phase: 4
+    name: "Implementation"
+    workflows:
+      - id: "sprint-planning"
+        status: "required"
+        command: "/bmad:bmm:workflows:sprint-planning"
