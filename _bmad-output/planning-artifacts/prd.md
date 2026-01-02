@@ -21,21 +21,23 @@ lastStep: 2
 
 ## Executive Summary
 
-Torii Nihongo (SP26SE005) là một giải pháp EdTech toàn diện được thiết kế để hợp nhất trải nghiệm học tiếng Nhật đang bị phân mảnh. Hệ thống cung cấp một lộ trình học tập JLPT khép kín từ học lý thuyết qua video, ôn tập thông minh bằng Flashcards (SRS), đến thực hành tương tác trong các lớp học ảo WebRTC chất lượng cao. Điểm đột phá của dự án nằm ở hệ thống Multi-Agent AI (Sensei, Assessment, Analytics) dựa trên giao thức FastMCP, cung cấp khả năng phản hồi thời gian thực và cá nhân hóa lộ trình học cho từng học viên.
+Torii Nihongo (SP26SE005) là một giải pháp EdTech toàn diện được thiết kế để hợp nhất trải nghiệm học tiếng Nhật đang bị phân mảnh. Hệ thống cung cấp một lộ trình học tập JLPT khép kín từ học lý thuyết qua video, ôn tập thông minh bằng Flashcards (SRS), đến thực hành tương tác trong các lớp học ảo WebRTC chất lượng cao. Điểm đột phá của dự án nằm ở hệ thống Multi-Agent AI (Cortex) dựa trên giao thức FastMCP, cung cấp khả năng phản hồi thời gian thực và cá nhân hóa lộ trình học cho từng học viên.
+
+Hệ thống được thiết kế linh hoạt, tối ưu cho cả trải nghiệm tự học (Self-paced) linh hoạt và mô hình học có hướng dẫn (Instructor-led) bài bản. Việc tích hợp thanh toán tức thì qua VNPay cùng cơ chế tặng khóa học (Gifting) giúp hệ thống không chỉ là một nền tảng học tập mà còn là một hệ sinh thái thương mại giáo dục hiện đại.
 
 ### What Makes This Special
 
-- **Hệ sinh thái AI FastMCP:** Sử dụng mô hình Multi-Agent để hỗ trợ học viên 24/7 từ giải đáp ngữ pháp đến đánh giá năng lực thử nghiệm JLPT với độ trễ cực thấp.
-- **Lớp học ảo tương tác sâu:** WebRTC không chỉ dừng lại ở Video/Audio mà tích hợp Whiteboard thời gian thực (hỗ trợ AI nhận diện chữ viết Kanji) và quản lý tài liệu tập trung với phân quyền chi tiết.
-- **Lộ trình học tập thích ứng:** Tự động hóa việc theo dõi tiến độ và đề xuất bài tập thông qua Analytics Agent, giúp tối ưu hóa việc ôn luyện JLPT.
-- **Vận hành thông minh:** Cung cấp công cụ quản trị mạnh mẽ (Bulk Import, Revenue Analytics) giúp trung tâm Nhật ngữ tối ưu hóa quy trình làm việc của Staff và Lecturers.
+- **Hệ sinh thái AI "Human-in-the-loop" & Sensei 24/7:** Mô hình Multi-Agent không chỉ hỗ trợ giải đáp 24/7 (Sensei) mà còn cung cấp cơ chế "Chấm bài nháp" (Draft Grading) giúp giảng viên giảm 80% thời gian vận hành. AI còn hỗ trợ dự đoán điểm JLPT và tạo đề thi thích ứng từ ngân hàng câu hỏi khổng lồ.
+- **Lớp học ảo tương tác sâu & Command Center:** WebRTC tích hợp Whiteboard thời gian thực hỗ trợ AI nhận diện chữ viết Kanji. Staff có thể giám sát hàng trăm lớp học qua "Command Center" để hỗ trợ kỹ thuật tức thì (Quick Support) mà không làm gián đoạn bài giảng.
+- **Lộ trình thích ứng & Đồng bộ SRS đa nền tảng:** Thuật toán lặp lại ngắt quãng (SRS) hoạt động nhất quán giữa Web và Mobile (hỗ trợ cả Offline). Hệ thống tự động điều chỉnh lộ trình học (Analytics Agent) dựa trên dữ liệu học tập thực tế và tích hợp Deck Marketplace để chia sẻ tài liệu cộng đồng.
+- **Vận hành thông minh & Thương mại tức thì:** Thương mại hóa giáo dục qua VNPay với cơ chế mã kích hoạt thời gian thực (Gifting). Công cụ quản trị mạnh mẽ (Bulk Import, Revenue Analytics) giúp tối ưu hóa hiệu suất làm việc cho cả đội ngũ Staff và Admin.
 
 ## Project Classification
 
 **Technical Type:** Web Application & Mobile Application (Cross-platform)
 **Domain:** EdTech (Education Technology)
 **Complexity:** High (Real-time AI, WebRTC, Event-Driven Architecture)
-**Project Context:** Brownfield - Nâng cấp dựa trên hạ tầng NATS/Microservices sẵn có.
+**Project Context:** Brownfield - Nâng cấp và mở rộng dựa trên hạ tầng NATS/Microservices sẵn có.
 
 ### Strategic Key Features (High-Level User Stories)
 - **AI Feedback:** Phản hồi sửa lỗi viết tay Kanji thời gian thực trên Whiteboard lớp học.
@@ -104,3 +106,35 @@ Hệ thống cung cấp các công cụ mạnh mẽ để Giảng viên điều 
 - **US.LECT.03 (AI Grading Assistant):** AS A Lecturer, tôi muốn AI hỗ trợ chấm nháp các lỗi ngữ pháp/từ vựng cơ bản trong bài tập để tôi có thể tập trung vào việc đưa ra các nhận xét chuyên môn sâu hơn.
 - **US.LECT.04 (Digital Asset Integration):** AS A Lecturer, tôi muốn truy cập trực tiếp kho tài liệu cá nhân (My Folders) ngay trong lớp học để chia sẻ PDF/Hình ảnh lên Whiteboard một cách tức thì.
 - **US.LECT.05 (Automated Session Reports):** AS A Lecturer, tôi muốn nhận báo cáo tự động sau mỗi buổi học (danh sách điểm danh, thời lượng tham gia, thống kê tương tác) để quản lý lớp học hiệu quả.
+
+## Detailed Functional Requirements - Assignments (Bài tập tự luận)
+
+Hệ thống quản lý bài tập tự luận cho phép sự tương tác sâu giữa giảng viên và học viên với sự hỗ trợ từ AI.
+
+- **US.ASSIGN.01 (Multi-format Submissions):** AS A Learner, tôi muốn nộp bài tập dưới nhiều định dạng (Text, PDF, Image, Audio) để phù hợp với yêu cầu thực hành đa dạng (viết luận, nói, bài tập viết tay).
+- **US.ASSIGN.02 (AI Pre-grading Assistant):** AS A Lecturer, tôi muốn xem các gợi ý sửa lỗi và đánh giá sơ bộ từ AI đối với bài làm của học viên để rút ngắn thời gian chấm bài và tăng tính khách quan.
+- **US.ASSIGN.03 (Contextual Feedback):** AS A Learner, tôi muốn nhận được nhận xét chi tiết kèm theo điểm số từ giảng viên và có thể gửi thắc mắc ngược lại cho giảng viên về bài tập đó.
+
+## Detailed Functional Requirements - Content Management (Blog CMS)
+
+Cung cấp các công cụ để Staff xây dựng nội dung bổ trợ, tin tức và thu hút cộng đồng người học.
+
+- **US.CMS.01 (Rich Content Authoring):** AS A Staff, tôi muốn sử dụng trình soạn thảo văn bản giàu tính năng để tạo bài blog có đính kèm video hướng dẫn, Kanji card và các tài liệu học tập mẫu.
+- **US.CMS.02 (Educational Cross-promotion):** AS A Staff, tôi muốn gắn thẻ (Tags) và liên kết các bài blog với khóa học tương ứng (ví dụ: bài viết về tips thi N3 gắn link tới khóa học N3) để kích cầu.
+- **US.CMS.03 (Engagement Analytics):** AS A Staff, tôi muốn theo dõi hiệu quả của bài viết thông qua các chỉ số tương tác (Views, Likes) để điều chỉnh chiến lược nội dung.
+
+## Detailed Functional Requirements - Notification Engine
+
+Hệ thống thông báo thông minh giúp duy trì sự kết nối giữa người học và nền tảng, đảm bảo không bỏ lỡ các mốc quan trọng trong lộ trình học tập.
+
+- **US.NOTIF.01 (Smart Class Reminder):** AS A Learner, tôi muốn nhận thông báo đẩy trước giờ học WebRTC 15 phút kèm theo đường dẫn truy cập nhanh để đảm bảo tham gia đúng giờ.
+- **US.NOTIF.02 (SRS Review Notification):** AS A Learner, tôi muốn hệ thống nhắc nhở khi đến "thời điểm vàng" để ôn tập Flashcard (theo thuật toán SRS) nhằm tối ưu hóa khả năng ghi nhớ dài hạn.
+- **US.NOTIF.03 (Assignment & Progress Updates):** AS A Learner, tôi muốn nhận thông báo ngay khi bài tập được chấm điểm hoặc khi có tài liệu mới được giảng viên chia sẻ trong lớp học.
+
+## Detailed Functional Requirements - Dashboard & Analytics
+
+Cung cấp cái nhìn toàn cảnh và công cụ ra quyết định cho cấp quản lý cũng như tối ưu hóa quy trình làm việc cho nhân viên vận hành.
+
+- **US.DASH.01 (Executive System Overview):** AS An Admin, tôi muốn theo dõi các chỉ số sức khỏe của hệ thống (doanh thu, số lượng học viên online, tỷ lệ mua khóa học) qua biểu đồ trực quan để điều hành kinh doanh.
+- **US.DASH.02 (Staff Productivity To-do):** AS A Staff, tôi muốn một danh sách các công việc ưu tiên cần xử lý ngay (duyệt câu hỏi, chấm bài tập, phản hồi khiếu nại) để tăng năng suất làm việc.
+- **US.DASH.03 (Predictive Retention Analytics):** AS A Staff, tôi muốn hệ thống tự động phân tích và cảnh báo những học viên có dấu hiệu bỏ học hoặc kết quả sụt giảm để có biện pháp hỗ trợ kịp thời.
