@@ -1,6 +1,6 @@
 # Story 2.3: JWT Refresh Token Flow
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: This story requires careful handling of platform-specific auth patterns (Cookie vs Bearer) -->
 
@@ -51,20 +51,20 @@ so that I am not interrupted by login screens when my short-lived access token e
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Web Client Interceptor (Shared Logic)** (AC: #1)
-  - [ ] Create `setupAxiosInterceptors` utility function in shared lib (or copy to both projects).
-  - [ ] Implement `401` detection logic.
-  - [ ] Implement "Refresh Queue" pattern (process queue on success/fail).
-  - [ ] Integrate into Next.js root layout or provider.
-  - [ ] Integrate into Vite `main.tsx` or auth store.
-  - [ ] **Verification**: Wait for access token expiry (15m) or manually invalidate cookie, verify smooth refresh.
+- [x] **Task 1: Web Client Interceptor (Shared Logic)** (AC: #1)
+  - [x] Create `setupAxiosInterceptors` utility function in shared lib (or copy to both projects).
+  - [x] Implement `401` detection logic.
+  - [x] Implement "Refresh Queue" pattern (process queue on success/fail).
+  - [x] Integrate into Next.js root layout or provider.
+  - [x] Integrate into Vite `main.tsx` or auth store.
+  - [x] **Verification**: Wait for access token expiry (15m) or manually invalidate cookie, verify smooth refresh.
 
-- [ ] **Task 2: Mobile Client Interceptor (Flutter)** (AC: #2)
-  - [ ] Update `AuthRepository` to include `refreshToken` method.
-  - [ ] Create `AuthInterceptor` class extending `QueuedInterceptor`.
-  - [ ] Implement `onError` override for 401 handling.
-  - [ ] Implement `x-platform: mobile` header injection.
-  - [ ] **Verification**: Manually expire token or mock 401, verify transparent refresh.
+- [x] **Task 2: Mobile Client Interceptor (Flutter)** (AC: #2)
+  - [x] Update `AuthRepository` to include `refreshToken` method.
+  - [x] Create `AuthInterceptor` class extending `QueuedInterceptor`.
+  - [x] Implement `onError` override for 401 handling.
+  - [x] Implement `x-platform: mobile` header injection.
+  - [x] **Verification**: Manually expire token or mock 401, verify transparent refresh.
 
 ## Dev Notes
 
@@ -87,6 +87,37 @@ so that I am not interrupted by login screens when my short-lived access token e
 ## Dev Agent Record
 
 ### Agent Model Used
-{{agent_model_name_version}}
+Claude 3.5 Sonnet (Antigravity)
+
+### Implementation Summary
+**Date:** 2026-01-03
+
+**Status:** ✅ All tasks complete - User manually verified functionality
+
+**Implementation Notes:**
+- **Web Applications (Next.js Learner + Vite Admin):** Both apps already had complete axios interceptor implementations with:
+  - `withCredentials: true` for automatic cookie handling
+  - 401 detection and refresh queue pattern
+  - Loop prevention for `/auth/refresh` endpoint
+  - Safe redirect logic with duplicate prevention
+  - Proper error handling and token refresh flow
+  
+- **Mobile Application (Flutter):** Complete Dio interceptor implementation with:
+  - `QueuedInterceptorsWrapper` for concurrency safety
+  - `x-platform: mobile` header injection for all requests
+  - Bearer token management via `FlutterSecureStorage`
+  - Separate Dio instance for refresh calls (prevents interceptor loops)
+  - Proper queue processing on success/failure
+
+**Verification:**
+User (Tienh) confirmed manual testing completed successfully for all platforms.
 
 ### File List
+- `apps/web-learner/lib/api-client.ts` - Next.js axios interceptor (existing, verified)
+- `apps/web-admin/src/lib/api-client.ts` - Vite axios interceptor (existing, verified)
+- `torii-mobile/lib/data/api/api_client.dart` - Flutter Dio interceptor (existing, verified)
+- `torii-mobile/lib/data/repositories/auth_repository.dart` - Auth repository with refreshToken method (existing, verified)
+
+### Change Log
+- 2026-01-03: Story marked complete - All refresh token interceptors verified as implemented and manually tested by user
+

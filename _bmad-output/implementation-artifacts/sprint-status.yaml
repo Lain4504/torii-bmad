@@ -10,7 +10,7 @@ development_status:
   1-1-initialize-nextjs-learner-app: obsolete # Already implemented (Next.js 16)
   1-2-initialize-vite-admin-staff-meet-apps: obsolete # Already implemented (Vite 6)
   1-3-initialize-flutter-mobile-app: obsolete # Already implemented (Flutter)
-  1-4-set-up-ci-cd-pipelines: backlog
+  1-4-set-up-ci-cd-pipelines: ready-for-dev
   1-5-configure-monitoring-logging: backlog
   1-6-set-up-environment-configuration: obsolete # Already implemented
   1-7-audit-ci-cd-pipelines: backlog # NEW
@@ -20,16 +20,16 @@ development_status:
 
   # Epic 2: Authentication & User Management (Active)
   epic-2: in-progress
-  2-1-user-registration-web-mobile: review # UNBLOCKED - NEXT
+  2-1-user-registration-web-mobile: done # UNBLOCKED - NEXT
   2-2-user-login-web-mobile: done
-  2-3-jwt-refresh-token-flow: ready-for-dev
+  2-3-jwt-refresh-token-flow: done
   2-4-profile-management: backlog
-  2-5-rbac-implementation: backlog
+  2-5-rbac-implementation: ready-for-dev
   2-6-nats-auth-callout-integration: obsolete # Already implemented in Gateway
-  2-7-session-management: backlog
-  2-8-admin-user-impersonation: backlog
-  2-9-email-verification: backlog # NEW
-  2-10-password-reset-flow: backlog # NEW
+  2-7-session-management: ready-for-dev
+  2-8-admin-user-impersonation: ready-for-dev
+  2-9-email-verification: ready-for-dev # NEW
+  2-10-password-reset-flow: ready-for-dev # NEW
   2-11-security-hardening: backlog # NEW
   epic-2-retrospective: optional
 
