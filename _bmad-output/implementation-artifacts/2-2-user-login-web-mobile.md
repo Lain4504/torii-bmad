@@ -1,6 +1,6 @@
 # Story 2.2: User Login (Web & Mobile)
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: This story focuses on FRONTEND integration as Backend Auth is already implemented -->
 

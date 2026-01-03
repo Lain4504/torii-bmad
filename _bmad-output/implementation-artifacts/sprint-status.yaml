@@ -20,8 +20,8 @@ development_status:
 
   # Epic 2: Authentication & User Management (Active)
   epic-2: in-progress
-  2-1-user-registration-web-mobile: backlog # blocked by 2-2
-  2-2-user-login-web-mobile: ready-for-dev # HIGH PRIORITY - START HERE
+  2-1-user-registration-web-mobile: ready-for-dev # UNBLOCKED - NEXT
+  2-2-user-login-web-mobile: done
   2-3-jwt-refresh-token-flow: backlog
   2-4-profile-management: backlog
   2-5-rbac-implementation: backlog
