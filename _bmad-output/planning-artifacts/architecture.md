@@ -596,3 +596,300 @@ Use consistent naming across platforms:
 - Documentation
 
 **Note:** Project initialization using these commands should be the first implementation story for each application.
+
+## Core Architectural Decisions
+
+### Decision Priority Analysis
+
+**Critical Decisions (Block Implementation):**
+- Authentication & authorization patterns (JWT with refresh tokens)
+- State management strategy (Redux for admin/meet, Zustand for learner)
+- API communication patterns (Axios + TanStack Query)
+- Cross-platform data synchronization (Protobuf for mobile, REST for web)
+- Real-time communication architecture (NATS + WebRTC)
+
+**Important Decisions (Shape Architecture):**
+- Frontend routing strategies (App Router for Next.js, React Router for Vite)
+- Error handling and logging standards
+- Testing strategy and coverage targets
+- CI/CD pipeline approach
+- Monitoring and observability
+
+**Deferred Decisions (Post-MVP):**
+- Advanced caching strategies beyond Redis
+- Microservices orchestration patterns
+- Advanced analytics and BI integration
+- Multi-region deployment strategy
+
+---
+
+### Data Architecture
+
+**Database: PostgreSQL with Prisma ORM** (Existing - Brownfield)
+- **Version**: PostgreSQL 15+, Prisma 5+
+- **Rationale**: Already implemented, type-safe queries, excellent TypeScript integration
+- **Migration Strategy**: Prisma Migrate for schema changes
+- **Normalization**: 3NF for relational data
+- **Affects**: All backend microservices
+
+**Caching: Redis** (Existing - Brownfield)
+- **Version**: Redis 7+
+- **Use Cases**: Session management, API response caching, rate limiting
+- **TTL Strategy**: 
+  - Sessions: 30 minutes
+  - API responses: 5-60 minutes (based on data volatility)
+  - Rate limit counters: 1 minute sliding window
+- **Affects**: Identity service, API Gateway
+
+**Object Storage: MinIO/S3** (Existing - Brownfield)
+- **Use Cases**: Video lessons, course materials, user uploads, live class recordings
+- **Bucket Strategy**:
+  - `videos-vod`: Pre-recorded course videos
+  - `videos-live`: Live class recordings
+  - `materials`: PDF, images, documents
+  - `user-uploads`: Student assignments, profile pictures
+- **CDN**: Consider CloudFront or similar for video delivery
+- **Affects**: LMS service, Meet service, Storage service
+
+**Mobile Local Database: Drift (SQLite)** (New - Greenfield)
+- **Version**: Drift 2.14+
+- **Use Cases**: Offline-first data persistence for mobile app
+- **Sync Strategy**: Background sync when WiFi available, conflict resolution (last-write-wins for progress)
+- **Schema**: Mirror subset of backend schema for offline access
+- **Affects**: Flutter mobile app
+
+**Data Validation Strategy:**
+- **Backend**: Zod for DTO validation in NestJS
+- **Frontend Web**: Zod + React Hook Form for form validation
+- **Mobile**: Freezed + Riverpod for immutable state validation
+- **Rationale**: Type-safe validation across all layers
+
+---
+
+### Authentication & Security
+
+**Authentication Method: JWT with Refresh Tokens** (Existing + Enhanced)
+- **Access Token**: 1 hour expiry, stored in memory (web) or secure storage (mobile)
+- **Refresh Token**: 7 days expiry, httpOnly cookie (web) or Flutter Secure Storage (mobile)
+- **Token Rotation**: Refresh token rotates on each use for security
+- **Logout**: Blacklist refresh tokens in Redis
+- **Affects**: All applications
+
+**Authorization: RBAC with NATS Auth Callout** (Existing - Brownfield)
+- **Roles**: Learner, Lecturer, Staff (Academic/Operations/Admissions/Financial), Admin
+- **NATS Permissions**: Dynamic pub/sub permissions per user/room via Auth Callout
+- **HTTP Permissions**: Role-based guards in NestJS
+- **Frontend**: Role-based route protection and UI rendering
+- **Affects**: All services, especially Meet service for real-time permissions
+
+**API Security:**
+- **CORS**: Centralized at API Gateway, whitelist specific origins
+- **Rate Limiting**: Redis-based, 1000 requests/minute per API key
+- **Input Validation**: Zod schemas for all DTOs
+- **SQL Injection Prevention**: Prisma parameterized queries
+- **XSS Prevention**: Content Security Policy headers, sanitize user inputs
+- **CSRF Protection**: SameSite cookies, CSRF tokens for state-changing operations
+
+**Data Encryption:**
+- **In Transit**: TLS 1.3 for all HTTP/WebSocket connections
+- **At Rest**: PostgreSQL encryption, encrypted S3 buckets
+- **Sensitive Data**: bcrypt for passwords (cost factor 12), AES-256 for PII if needed
+- **Affects**: All services
+
+---
+
+### API & Communication Patterns
+
+**API Design: RESTful with Protobuf for Mobile** (Existing - Brownfield)
+- **Web**: REST APIs with JSON responses
+- **Mobile**: Protobuf for efficient serialization (bandwidth optimization)
+- **Versioning**: URL versioning (`/api/v1/...`)
+- **Pagination**: Cursor-based for large datasets, offset for small
+- **Filtering**: Query parameters with Zod validation
+
+**API Documentation: OpenAPI/Swagger** (Existing)
+- **Generation**: NestJS Swagger decorators auto-generate spec
+- **TypeScript Codegen**: Use `openapi-typescript-codegen` for web clients
+- **Interactive Docs**: Swagger UI at `/api/docs`
+- **Affects**: All microservices, frontend development
+
+**HTTP Client (Web):**
+- **Library**: Axios
+- **Interceptors**: 
+  - Request: Add JWT access token to Authorization header
+  - Response: Auto-refresh token on 401, retry original request
+- **Error Handling**: Centralized error interceptor, map backend errors to user-friendly messages
+- **Base URLs**: Environment-specific (dev/staging/prod)
+- **Affects**: Next.js learner app, Vite admin/meet apps
+
+**Real-Time Communication:**
+- **NATS JetStream**: Event-driven workflows (workqueues, pub/sub)
+  - Subjects: `sysJsWorker.{roomId}.{userId}`, `chat.{roomId}`, `whiteboard.{roomId}`
+  - Consumers: Per-user consumers for chat/whiteboard, worker pool for system events
+- **WebRTC (LiveKit)**: Live video/audio for classes
+  - Adaptive bitrate: Auto-adjust quality based on network
+  - Recording: Auto-record to MinIO, transcode via NATS workqueue
+- **WebSocket Fallback**: For clients that can't use NATS directly
+- **Affects**: Meet service, mobile app, web meet app
+
+**Error Handling Standards:**
+- **HTTP Status Codes**: Proper use (200, 201, 400, 401, 403, 404, 500)
+- **Error Response Format**:
+  ```json
+  {
+    "statusCode": 400,
+    "message": "User-friendly error message",
+    "error": "BadRequest",
+    "errorCode": "ERR_AUTH_001",
+    "timestamp": "2026-01-03T15:30:00Z"
+  }
+  ```
+- **Logging**: Structured logs with correlation IDs for request tracing
+- **Affects**: All services
+
+---
+
+### Frontend Architecture
+
+**State Management:**
+- **Web Admin/Staff Apps (Vite/React)**: Redux Toolkit
+  - Complex RBAC state management
+  - Multi-role permission handling
+  - Redux DevTools for debugging
+- **Web Meet App (Vite/React)**: Redux Toolkit
+  - Complex WebRTC state (participants, tracks, quality)
+  - Real-time collaboration state
+  - Debugging complex state transitions
+- **Web Learner App (Next.js)**: Zustand
+  - Lightweight state management
+  - Simple learner-focused flows
+  - Better performance for SSR
+- **All Web Apps**: TanStack Query for server state
+  - Automatic caching and refetching
+  - Optimistic updates
+  - Loading/error states
+- **Mobile App (Flutter)**: Riverpod
+  - Type-safe dependency injection
+  - Code generation for providers
+  - AsyncValue for loading/error states
+
+**Routing:**
+- **Next.js Learner App**: App Router (file-system based)
+  - Server Components by default
+  - Nested layouts for consistent UI
+  - Protected routes via middleware
+- **Vite Admin/Meet Apps**: React Router v6
+  - Client-side routing
+  - Nested routes for dashboard layouts
+  - Protected routes via route guards
+- **Mobile App**: GoRouter
+  - Declarative routing
+  - Deep linking support
+  - Type-safe navigation
+
+**Component Architecture:**
+- **Design System**: shadcn/ui (web), Material 3 (mobile)
+- **Component Structure**:
+  - Atomic design pattern (atoms, molecules, organisms, templates, pages)
+  - Feature-based organization for complex features
+  - Shared components library for common UI elements
+- **Styling**: Tailwind CSS (web), ThemeData (mobile)
+- **Accessibility**: WCAG 2.1 AA compliance, ARIA labels, keyboard navigation
+
+**Performance Optimization:**
+- **Code Splitting**: Automatic (Next.js, Vite), manual for large features
+- **Lazy Loading**: Route-based, component-based for heavy components
+- **Image Optimization**: next/image (Next.js), CachedNetworkImage (Flutter)
+- **Bundle Size**: Target <500KB initial load (web), <50MB APK (mobile)
+- **Caching**: Service Worker for web, Drift cache for mobile
+
+---
+
+### Infrastructure & Deployment
+
+**Hosting Strategy:**
+- **Backend Microservices**: Docker containers, orchestrated via Docker Compose (dev) or Kubernetes (prod)
+- **Web Apps**: 
+  - Next.js: Vercel or self-hosted Node.js server
+  - Vite/React: Static hosting (Netlify, Vercel, or S3 + CloudFront)
+- **Mobile App**: App Store (iOS), Google Play (Android)
+- **Database**: Managed PostgreSQL (AWS RDS, DigitalOcean, or self-hosted)
+- **Redis**: Managed Redis (AWS ElastiCache or self-hosted)
+- **NATS**: Self-hosted NATS cluster
+- **LiveKit**: Self-hosted or LiveKit Cloud
+
+**CI/CD Pipeline:**
+- **Version Control**: Git with feature branch workflow
+- **CI**: GitHub Actions or GitLab CI
+  - Lint, test, build on every PR
+  - Auto-deploy to staging on merge to `develop`
+  - Manual approval for production deploy
+- **CD**: Automated deployment to staging, manual to production
+- **Docker Registry**: Docker Hub or private registry
+- **Secrets Management**: Environment variables, encrypted secrets in CI/CD
+
+**Environment Configuration:**
+- **Environments**: Development, Staging, Production
+- **Config Management**: `.env` files (local), environment variables (deployed)
+- **Secrets**: Never commit to Git, use CI/CD secrets or secret management service
+- **Feature Flags**: Simple boolean flags in config for gradual rollout
+
+**Monitoring & Logging:**
+- **Application Monitoring**: Sentry for error tracking
+- **Performance Monitoring**: Lighthouse CI for web, Firebase Performance for mobile
+- **Logging**: Structured JSON logs, centralized via ELK stack or similar
+- **Metrics**: Prometheus + Grafana for backend metrics
+- **Uptime Monitoring**: UptimeRobot or Pingdom
+- **Affects**: All services
+
+**Scaling Strategy:**
+- **Horizontal Scaling**: Stateless microservices, load balancer in front
+- **Database**: Read replicas for read-heavy operations
+- **Caching**: Redis cluster for high availability
+- **CDN**: CloudFront or similar for static assets and videos
+- **WebRTC**: LiveKit auto-scales based on participant count
+- **Target**: Support 50+ concurrent live classes, 10K users
+
+---
+
+### Decision Impact Analysis
+
+**Implementation Sequence:**
+
+1. **Phase 1: Foundation** (Week 1)
+   - Initialize frontend projects (Next.js, Vite, Flutter)
+   - Set up CI/CD pipelines
+   - Configure environment variables
+   - Set up monitoring and logging
+
+2. **Phase 2: Authentication** (Week 1-2)
+   - Implement JWT refresh token flow
+   - Set up CORS at API Gateway
+   - Implement protected routes
+   - Test auth across all platforms
+
+3. **Phase 3: Core Features** (Week 2-6)
+   - Implement state management (Redux, Zustand, Riverpod)
+   - Set up API clients (Axios, TanStack Query)
+   - Implement core UI components (shadcn/ui, Material 3)
+   - Build feature modules
+
+4. **Phase 4: Real-Time Features** (Week 5-7)
+   - Integrate NATS for real-time events
+   - Implement WebRTC live classes
+   - Build whiteboard collaboration
+   - Test real-time sync
+
+5. **Phase 5: Polish & Deploy** (Week 8-10)
+   - Performance optimization
+   - Accessibility audit
+   - Security audit
+   - Production deployment
+
+**Cross-Component Dependencies:**
+
+- **Authentication** affects all components (must be implemented first)
+- **State Management** depends on API client setup
+- **Real-Time Features** depend on NATS infrastructure (already exists)
+- **Mobile Offline** depends on Drift schema (mirrors backend)
+- **Monitoring** should be set up early to catch issues during development
