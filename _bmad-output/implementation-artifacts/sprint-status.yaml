@@ -1,66 +1,39 @@
 # generated: 2026-01-03T16:09:45+07:00
+# updated: 2026-01-03T16:28:00+07:00
 # project: torii-nihongo
 # tracking_system: file-system
-# story_location: {project-root}/_bmad-output/implementation-artifacts
-
-# STATUS DEFINITIONS:
-# ==================
-# Epic Status:
-#   - backlog: Epic not yet started
-#   - in-progress: Epic actively being worked on
-#   - done: All stories in epic completed
-#
-# Epic Status Transitions:
-#   - backlog → in-progress: Automatically when first story is created (via create-story)
-#   - in-progress → done: Manually when all stories reach 'done' status
-#
-# Story Status:
-#   - backlog: Story only exists in epic file
-#   - ready-for-dev: Story file created in stories folder
-#   - in-progress: Developer actively working on implementation
-#   - review: Ready for code review (via Dev's code-review workflow)
-#   - done: Story completed
-#
-# Retrospective Status:
-#   - optional: Can be completed but not required
-#   - done: Retrospective has been completed
-#
-# WORKFLOW NOTES:
-# ===============
-# - Epic transitions to 'in-progress' automatically when first story is created
-# - Stories can be worked in parallel if team capacity allows
-# - SM typically creates next story after previous one is 'done' to incorporate learnings
-# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
-
-generated: 2026-01-03T16:09:45+07:00
-project: torii-nihongo
-tracking_system: file-system
-story_location: "{project-root}/_bmad-output/implementation-artifacts"
+# story_location: "{project-root}/_bmad-output/implementation-artifacts"
 
 development_status:
-  # Epic 1: Foundation & Project Initialization (6 stories)
-  epic-1: in-progress
-  1-1-initialize-nextjs-learner-app: ready-for-dev
-  1-2-initialize-vite-admin-staff-meet-apps: backlog
-  1-3-initialize-flutter-mobile-app: backlog
+  # Epic 1: Foundation & Project Initialization
+  epic-1: done # Marked done as mostly complete/obsolete
+  1-1-initialize-nextjs-learner-app: obsolete # Already implemented (Next.js 16)
+  1-2-initialize-vite-admin-staff-meet-apps: obsolete # Already implemented (Vite 6)
+  1-3-initialize-flutter-mobile-app: obsolete # Already implemented (Flutter)
   1-4-set-up-ci-cd-pipelines: backlog
   1-5-configure-monitoring-logging: backlog
-  1-6-set-up-environment-configuration: backlog
+  1-6-set-up-environment-configuration: obsolete # Already implemented
+  1-7-audit-ci-cd-pipelines: backlog # NEW
+  1-8-implement-monitoring-stack: backlog # NEW
+  1-9-set-up-testing-infrastructure: backlog # NEW
   epic-1-retrospective: optional
 
-  # Epic 2: Authentication & User Management (8 stories)
-  epic-2: backlog
-  2-1-user-registration-web-mobile: backlog
-  2-2-user-login-web-mobile: backlog
+  # Epic 2: Authentication & User Management (Active)
+  epic-2: in-progress
+  2-1-user-registration-web-mobile: backlog # blocked by 2-2
+  2-2-user-login-web-mobile: ready-for-dev # HIGH PRIORITY - START HERE
   2-3-jwt-refresh-token-flow: backlog
   2-4-profile-management: backlog
   2-5-rbac-implementation: backlog
-  2-6-nats-auth-callout-integration: backlog
+  2-6-nats-auth-callout-integration: obsolete # Already implemented in Gateway
   2-7-session-management: backlog
   2-8-admin-user-impersonation: backlog
+  2-9-email-verification: backlog # NEW
+  2-10-password-reset-flow: backlog # NEW
+  2-11-security-hardening: backlog # NEW
   epic-2-retrospective: optional
 
-  # Epic 3: Course Discovery & Enrollment (7 stories)
+  # Epic 3: Course Discovery & Enrollment
   epic-3: backlog
   3-1-course-catalog-web-mobile: backlog
   3-2-course-detail-page: backlog
@@ -71,7 +44,7 @@ development_status:
   3-7-financial-records: backlog
   epic-3-retrospective: optional
 
-  # Epic 4: Video Learning & Progress Tracking (6 stories)
+  # Epic 4: Video Learning & Progress Tracking
   epic-4: backlog
   4-1-video-player-web-mobile: backlog
   4-2-my-folders-organization: backlog
@@ -81,7 +54,7 @@ development_status:
   4-6-auto-save-progress: backlog
   epic-4-retrospective: optional
 
-  # Epic 5: Flashcards & SRS Learning (5 stories)
+  # Epic 5: Flashcards & SRS Learning
   epic-5: backlog
   5-1-flashcard-deck-display: backlog
   5-2-srs-flashcard-practice: backlog
@@ -90,7 +63,7 @@ development_status:
   5-5-custom-flashcard-creation: backlog
   epic-5-retrospective: optional
 
-  # Epic 6: JLPT Practice & Assessment (4 stories)
+  # Epic 6: JLPT Practice & Assessment
   epic-6: backlog
   6-1-exam-center: backlog
   6-2-take-practice-exam: backlog
@@ -98,7 +71,7 @@ development_status:
   6-4-5-pillar-jlpt-profile: backlog
   epic-6-retrospective: optional
 
-  # Epic 7: Live WebRTC Classes (10 stories)
+  # Epic 7: Live WebRTC Classes
   epic-7: backlog
   7-1-join-live-class-learner: backlog
   7-2-start-end-live-class-lecturer: backlog
@@ -112,7 +85,7 @@ development_status:
   7-10-backup-zoom-link-disaster-recovery: backlog
   epic-7-retrospective: optional
 
-  # Epic 8: AI Sensei (Learning Assistant) (4 stories)
+  # Epic 8: AI Sensei (Learning Assistant)
   epic-8: backlog
   8-1-contextual-q-a: backlog
   8-2-grammar-correction: backlog
@@ -120,7 +93,7 @@ development_status:
   8-4-fastmcp-integration: backlog
   epic-8-retrospective: optional
 
-  # Epic 9: AI Assessment & Grading (6 stories)
+  # Epic 9: AI Assessment & Grading
   epic-9: backlog
   9-1-dynamic-mini-test-creation: backlog
   9-2-draft-grading-workflow-lecturer: backlog
@@ -130,7 +103,7 @@ development_status:
   9-6-weakness-identification-adaptive-practice: backlog
   epic-9-retrospective: optional
 
-  # Epic 10: Lecturer & Staff Dashboards (12 stories)
+  # Epic 10: Lecturer & Staff Dashboards
   epic-10: backlog
   10-1-lecturer-dashboard: backlog
   10-2-engagement-heatmap: backlog
@@ -146,7 +119,7 @@ development_status:
   10-12-financial-staff-vnpay-reconciliation: backlog
   epic-10-retrospective: optional
 
-  # Epic 11: Admin Governance & Analytics (5 stories)
+  # Epic 11: Admin Governance & Analytics
   epic-11: backlog
   11-1-strategic-kpi-dashboard: backlog
   11-2-financial-reconciliation-tools: backlog
@@ -155,7 +128,7 @@ development_status:
   11-5-system-health-monitoring: backlog
   epic-11-retrospective: optional
 
-  # Epic 12: Gamification & Notifications (7 stories)
+  # Epic 12: Gamification & Notifications
   epic-12: backlog
   12-1-xp-system: backlog
   12-2-streak-tracking: backlog
