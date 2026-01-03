@@ -20,7 +20,7 @@ development_status:
 
   # Epic 2: Authentication & User Management (Active)
   epic-2: in-progress
-  2-1-user-registration-web-mobile: ready-for-dev # UNBLOCKED - NEXT
+  2-1-user-registration-web-mobile: review # UNBLOCKED - NEXT
   2-2-user-login-web-mobile: done
   2-3-jwt-refresh-token-flow: ready-for-dev
   2-4-profile-management: backlog
