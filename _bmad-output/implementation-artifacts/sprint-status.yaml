@@ -28,7 +28,7 @@ development_status:
   2-6-nats-auth-callout-integration: obsolete # Already implemented in Gateway
   2-7-session-management: ready-for-dev
   2-8-admin-user-impersonation: ready-for-dev
-  2-9-email-verification: ready-for-dev # NEW
+  2-9-email-verification: done # Magic Link email verification implemented
   2-10-password-reset-flow: ready-for-dev # NEW
   2-11-security-hardening: backlog # NEW
   epic-2-retrospective: optional

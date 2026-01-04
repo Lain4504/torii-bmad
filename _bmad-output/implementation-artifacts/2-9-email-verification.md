@@ -2,57 +2,60 @@
 
 Status: ready-for-dev
 
-<!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
+<!-- Note: Processed via validate-create-story - Ultimate context applied to prevent implementation disasters. -->
 
 ## Story
 
 As a learner,
-I want to verify my email address after registration or change,
+I want to verify my email address using a 6-digit OTP,
 so that my account is secure and I can receive important course notifications.
 
 ## Acceptance Criteria
 
 1. **Trigger on Registration:** Upon successful registration (Story 2.1), a verification email is automatically sent to the user's provided address.
-2. **Verification Token:** The email contains a unique, high-entropy, short-lived (e.g., 24 hours) verification token/link.
-3. **Verification Endpoint:** A GET endpoint `/auth/verify-email?token=...` confirms the token, updates the user's `isEmailVerified` status in the database, and redirects to a success page.
-4. **Trigger on Email Change:** When a user updates their email in their profile, the change remains "pending" until verified via the new address.
-5. **Notification Service Integration:** Leverage the `Notification Service` (per Architecture) via NATS to trigger the actual email sending.
-6. **Rate Limiting:** Resend verification requests are rate-limited to prevent spam (max 3 per hour).
-7. **Security:** Verification tokens must be hashed in the database (matching token logic for passwords).
+2. **Verification OTP:** The email contains a unique 6-digit OTP, short-lived (expires in 24 hours).
+3. **Verification UI:** A dedicated verification page handles the 6-digit input using the project's OTP component standards.
+4. **Backend Endpoint:** `POST /auth/verify-email` confirms the OTP against Redis, updates `isEmailVerified` in the database, and returns a success status.
+5. **Trigger on Email Change:** When a user updates their email in their profile, the change remains "pending" until the new address is verified via OTP.
+6. **Rate Limiting:** Resend verification requests are rate-limited to max 3 requests per hour per user/IP.
+7. **Security:** OTPs must be stored securely in Redis with TTL; subsequent failed attempts (max 5) should invalidate the OTP.
 
 ## Tasks / Subtasks
 
 - [ ] **Backend Implementation (NestJS)**
-  - [ ] Update User model in Prisma to include `isEmailVerified` (Boolean) and `verificationToken` (String, nullable).
-  - [ ] Implement `VerificationToken` generation logic (using `crypto` or similar).
+  - [ ] **Refactor**: Ensure User model supports `emailVerified` (boolean) and `pendingEmail` (string) for change flows.
+  - [ ] Implement OTP generation logic (6-digit numeric) and storage in Redis with 24h expiration.
+  - [ ] **Security**: Implement rate limiting for `/auth/resend-verification` (3 req/hr) using `ThrottlerModule` or Redis-based guard.
   - [ ] Create `POST /auth/resend-verification` endpoint.
-  - [ ] Create `GET /auth/verify-email` endpoint logic.
-  - [ ] Emit NATS event `auth.user.registered` for Notification Service.
+  - [ ] Create `POST /auth/verify-email` endpoint (validates OTP, updates DB status, clears Redis).
+  - [ ] **Event**: Emit NATS event `auth.user.registered` with payload: `{ email: string, otp: string, locale: string }`.
 - [ ] **Notification Service**
-  - [ ] Create email template for Verification (Vietnamese primary, English fallback).
-  - [ ] Integrate with an SMTP provider or Mock service for Dev/Staging.
+  - [ ] Create email template for OTP Verification (Vietnamese primary, English fallback).
+  - [ ] Handle `auth.user.registered` event to send the email via configured SMTP/Mock service.
 - [ ] **Frontend (Web Learner & Mobile)**
-  - [ ] Show "Verify your email" banner for unverified accounts.
-  - [ ] Create dedicated "Verification Success/Failure" pages.
-  - [ ] Implement "Resend Email" button with countdown/throttling.
+  - [ ] **Component**: Implement `input-otp` from `shadcn/ui` on the verification page (`/verify`).
+  - [ ] Implement "Resend OTP" button with a 60-second cooldown timer + server-side rate limit handling.
+  - [ ] **Error Handling**: Implement specific UI feedback for `OTP_EXPIRED`, `INVALID_OTP`, and `THROTTLED`.
+  - [ ] Ensure the OTP flow works seamlessly across Web and Mobile (unified OTP validity).
 
 ## Dev Notes
 
-- **Language:** The email content MUST be in Vietnamese by default (per PRD Market preference).
-- **Service Communication:** The Identity Service should NOT send emails directly. It should emit an event to NATS, and the Notification Service should handle the delivery.
-- **Persistence:** Ensure `prisma.user.update` handles the verification status atomically.
-- **Testing:** Unit test the token expiration logic and the token validation service.
+- **OTP Standard:** Use a 6-digit numeric code to maximize compatibility with mobile devices.
+- **Service Communication:** The Identity Service emits the event; the Notification Service is the ONLY service that sends emails.
+- **Persistence:** OTPs reside in Redis ONLY for speed and auto-expiration. The database only stores the final `isEmailVerified` state.
+- **Architecture Compliance:** Follow the `GatewayAuthGuard` patterns established in the server for protected routes.
 
 ### Project Structure Notes
 
-- Backend logic in `apps/server/src/modules/auth`.
-- Email templates in `apps/server/src/modules/notifications/templates`.
-- Frontend views in `apps/web-learner/src/app/(auth)/verify`.
+- Backend logic: `apps/server/src/modules/auth`.
+- Email templates: `apps/server/src/modules/notifications/templates`.
+- Frontend views: `apps/web-learner/src/app/(auth)/verify`.
+- Shared UI: `packages/ui/src/components/input-otp.tsx`.
 
 ### References
 
 - [Source: _bmad-output/planning-artifacts/prd.md#US.LEARN.10]
-- [Source: _bmad-output/planning-artifacts/architecture.md#Backend Microservices]
+- [Source: _bmad-output/planning-artifacts/architecture.md#Security & Compliance]
 - [Source: _bmad-output/planning-artifacts/epics.md#Epic 2]
 
 ## Dev Agent Record
@@ -62,6 +65,10 @@ so that my account is secure and I can receive important course notifications.
 Antigravity (Gemini 2.0 Flash)
 
 ### Debug Log References
+
+- Unified OTP logic (Link-based flow removed to avoid confusion with mobile deep-linking complexity).
+- Added explicit Rate Limiting tasks.
+- Defined NATS event schema for Notification Service integration.
 
 ### Completion Notes List
 
