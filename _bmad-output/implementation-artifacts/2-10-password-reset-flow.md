@@ -25,7 +25,7 @@ so that I can regain access to my account if I forget my credentials.
 - [ ] **Backend Implementation (NestJS)**
   - [ ] Create `POST /auth/forgot-password` (generates token, emits NATS event).
   - [ ] Create `POST /auth/reset-password` (validates token, updates DB, clears Redis sessions).
-  - [ ] Implement `ResetToken` schema/table (linked to user, includes `expiresAt` and `used` flag).
+  - [ ] Implement `ResetToken` schema/table in redis (includes `expiresAt` and `used` flag).
 - [ ] **Notification Service**
   - [ ] Create "Password Reset Request" email template (Vietnamese).
   - [ ] Create "Password Changed Confirmation" email template (Vietnamese).
@@ -39,7 +39,9 @@ so that I can regain access to my account if I forget my credentials.
 - **Token Disposal:** Tokens must be deleted or marked as used immediately after use to prevent reuse attacks.
 - **Rate Limiting:** Apply strict rate limiting on the `/forgot-password` endpoint to prevent mail server abuse.
 - **Security:** Ensure the reset link uses HTTPS (`NFR24`).
-- **Audit Logging:** Log all password reset attempts (success and failure) for the audit trail (`NFR23`).
+- **Email Notification:** Log all password reset attempts (success and failure) for the audit trail (`NFR23`). Send email to user to notify users when their password has changed.
+- **Notification**: Create notification in database in notification schema.
+
 
 ### Project Structure Notes
 
