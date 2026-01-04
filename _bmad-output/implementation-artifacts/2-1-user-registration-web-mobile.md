@@ -20,7 +20,8 @@ so that I can start using the platform's learning features.
         - Password strength (min 8 chars)
         - Passwords match
     - [x] Integration with `POST /api/auth/register`
-    - [x] On success: Redirect to login with success message
+    - [x] On success: **Auto-login** and redirect to **Dashboard**.
+    - [x] Show global "Verification Needed" banner on dashboard.
     - [x] Error handling: Show "Email already exists" clearly
 
 2.  **Web Admin (Vite)** - NO PUBLIC REGISTRATION
@@ -45,8 +46,8 @@ so that I can start using the platform's learning features.
   - [x] Create `RegisterForm` component in `components/auth/register-form.tsx`
   - [x] Create page `app/(auth)/register/page.tsx` with split-screen layout (matching login page)
   - [x] Implement form validation with Zod schema
-  - [x] Add register action to Redux authSlice (already exists, verify it works)
-  - [x] Handle post-registration flow (redirect to login with success toast)
+  - [ ] Update register action to handle auto-login (store token from response).
+  - [ ] Handle post-registration flow (redirect to Dashboard).
 
 - [x] **Task 2: Mobile App - Registration Screen (Flutter)** (AC: #3)
   - [x] Add `register` method to `AuthRepository`
@@ -102,3 +103,4 @@ so that I can start using the platform's learning features.
 ## Change Log
 - 2026-01-03: Started implementation. Status: ready-for-dev -> in-progress.
 - 2026-01-03: Completed implementation. Created web learner registration page and form. Mobile app registration already existed. Status: in-progress -> review.
+- 2026-01-04: **Re-opened** to update for Soft Gate flow (Auto-login + Dashboard redirect). Status: review -> in-progress.

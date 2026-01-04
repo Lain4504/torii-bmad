@@ -602,7 +602,7 @@ Use consistent naming across platforms:
 ### Decision Priority Analysis
 
 **Critical Decisions (Block Implementation):**
-- Authentication & authorization patterns (JWT with refresh tokens)
+- Authentication & authorization patterns (JWT with refresh tokens, Magic Link)
 - State management strategy (Redux for admin/meet, Zustand for learner)
 - API communication patterns (Axios + TanStack Query)
 - Cross-platform data synchronization (Protobuf for mobile, REST for web)
@@ -675,11 +675,14 @@ Use consistent naming across platforms:
 - **Logout**: Blacklist refresh tokens in Redis
 - **Affects**: All applications
 
-**Authorization: RBAC with NATS Auth Callout** (Existing - Brownfield)
+**Authorization: RBAC + Verified Status** (Enhanced)
 - **Roles**: Learner, Lecturer, Staff (Academic/Operations/Admissions/Financial), Admin
+- **Verified Status**: `emailVerified` boolean in JWT.
+- **VerifiedGuard**: Blocks specific high-risk actions (Checkout, Live Class Join) if `emailVerified=false`.
+- **Soft Gate**: Unverified users CAN login and browse, but see global "Verification Needed" banner.
 - **NATS Permissions**: Dynamic pub/sub permissions per user/room via Auth Callout
-- **HTTP Permissions**: Role-based guards in NestJS
-- **Frontend**: Role-based route protection and UI rendering
+- **HTTP Permissions**: Role-based guards + VerifiedGuard in NestJS
+- **Frontend**: Role-based route protection and UI rendering, plus RestrictedAction wrappers
 - **Affects**: All services, especially Meet service for real-time permissions
 
 **API Security:**
@@ -689,6 +692,7 @@ Use consistent naming across platforms:
 - **SQL Injection Prevention**: Prisma parameterized queries
 - **XSS Prevention**: Content Security Policy headers, sanitize user inputs
 - **CSRF Protection**: SameSite cookies, CSRF tokens for state-changing operations
+- **Magic Link Security**: One-time use tokens, 15-minute expiry, bound to email address
 
 **Data Encryption:**
 - **In Transit**: TLS 1.3 for all HTTP/WebSocket connections

@@ -270,6 +270,8 @@ Dành cho học viên trên cả hai nền tảng, tập trung vào sự tiện 
 - **US.LEARN.09 (Exam Center):** AS A Learner, tôi có thể tham gia các bài kiểm tra định kỳ và thi thử JLPT với đồng hồ đếm ngược và chấm điểm tự động.
 - **US.LEARN.10 (Profile & Privacy):** AS A Learner, tôi có thể cập nhật thông tin cá nhân, ảnh đại diện, đổi mật khẩu và quản lý thông tin liên hệ.
 - **US.LEARN.11 (Financial Records):** AS A Learner, tôi có thể theo dõi lịch sử thanh toán, danh sách đơn hàng và các khóa học đã tặng cho người khác.
+- **US.LEARN.12 (Magic Link Verification):** AS A Learner, tôi muốn xác thực email bằng cách nhấn vào link gửi về hòm thư (Magic Link) thay vì phải nhập mã OTP 6 số.
+- **US.LEARN.13 (Verification Soft Gate):** AS A Learner, tôi muốn có thể đăng nhập và xem nội dung miễn phí ngay sau khi đăng ký mà chưa cần xác thực email (chỉ bị giới hạn mua hàng và vào lớp Live).
 
 ## Detailed Functional Requirements - AI (Cortex Service)
 
@@ -417,13 +419,13 @@ His daily commute on the metro takes 2 hours each way, but the internet connecti
 Late one night after failing another practice test (scoring only 65/180), Minh searches for "JLPT N3 structured course Vietnam" and discovers Torii Nihongo. The homepage promises "AI-powered adaptive learning with live instructor support" - exactly what he needs. He sees a Hybrid course: "JLPT N3 Intensive - 12 weeks" with both pre-recorded videos AND weekly live classes. The price is reasonable, and there's a VNPay option. He decides to give it a shot.
 
 **The Transformation:**
-Within 10 minutes of payment, Minh is watching his first video lesson. The system automatically tracks his progress. After completing 3 video modules, he tries the built-in quiz - and the AI Sensei immediately identifies his weakness: he confuses similar particles (に vs で vs を). The system pushes targeted flashcards to his mobile app.
+Within 1 minute of registration, Minh has access to the Dashboard (Soft Gate). He sees a "Verification Needed" banner but can explore the course catalog immediately. He opens his email on his phone, clicks the **Magic Link**, and is instantly verified without typing any 6-digit code.
 
 **The Game-Changer - Offline Learning:**
 Minh discovers he can download entire lesson modules and flashcard decks to his phone. Now during his metro commute, he watches downloaded videos and practices flashcards completely offline. When he gets home and connects to WiFi, all his progress syncs automatically. Those 4 hours of daily commute time become his most productive study sessions.
 
 **Live Class Breakthrough:**
-During his first live WebRTC class, Minh writes a practice sentence on the whiteboard. The AI gives real-time feedback on his Kanji stroke order - something no YouTube video ever did. The lecturer, seeing his AI-flagged particle errors, spends 5 extra minutes explaining the nuances. Minh can ask questions and get immediate answers.
+During his first live WebRTC class (accessible only after verification), Minh writes a practice sentence on the whiteboard. The AI gives real-time feedback on his Kanji stroke order - something no YouTube video ever did. The lecturer, seeing his AI-flagged particle errors, spends 5 extra minutes explaining the nuances. Minh can ask questions and get immediate answers.
 
 When Minh struggles to understand a grammar point, he uses the screen reader accessibility feature to have the explanation read aloud while he follows along visually. The multi-modal learning helps it finally click.
 

@@ -1,75 +1,61 @@
-# Story 2.9: Email Verification
+# Story 2.9: Email Verification (Magic Link)
 
 Status: ready-for-dev
 
-<!-- Note: Processed via validate-create-story - Ultimate context applied to prevent implementation disasters. -->
+<!-- Note: Updated Processed via validate-create-story - Magic Link & Soft Gate Update -->
 
 ## Story
 
 As a learner,
-I want to verify my email address using a 6-digit OTP,
-so that my account is secure and I can receive important course notifications.
+I want to verify my email address by clicking a "Magic Link" sent to my inbox,
+so that I can prove ownership of my account without typing codes, while still accessing the platform immediately.
 
 ## Acceptance Criteria
 
-1. **Trigger on Registration:** Upon successful registration (Story 2.1), a verification email is automatically sent to the user's provided address.
-2. **Verification OTP:** The email contains a unique 6-digit OTP, short-lived (expires in 24 hours).
-3. **Verification UI:** A dedicated verification page handles the 6-digit input using the project's OTP component standards.
-4. **Backend Endpoint:** `POST /auth/verify-email` confirms the OTP against Redis, updates `isEmailVerified` in the database, and returns a success status.
-5. **Trigger on Email Change:** When a user updates their email in their profile, the change remains "pending" until the new address is verified via OTP.
-6. **Rate Limiting:** Resend verification requests are rate-limited to max 3 requests per hour per user/IP.
-7. **Security:** OTPs must be stored securely in Redis with TTL; subsequent failed attempts (max 5) should invalidate the OTP.
+1.  **Immediate Access (Soft Gate):** Upon registration, the user is **logged in immediately** and redirected to the Dashboard. They are NOT blocked by a verification screen.
+2.  **Magic Link Email:** A verification email is sent immediately. It contains a clickable link: `https://torii-platform.com/verify?token=XYZ` (Web) or `torii://verify?token=XYZ` (Mobile Deep Link).
+3.  **Token Security:**
+    *   One-time use only.
+    *   Expires in 15 minutes.
+    *   Cryptographically signed (JWT or random string stored in Redis).
+4.  **Verification Banner:** Unverified users see a persistent "Verification Needed" banner on all pages.
+5.  **Restricted Actions (Hard Gate):** Unverified users **CANNOT**:
+    *   Purchase courses.
+    *   Join Live Classes.
+    *   Post comments/reviews.
+6.  **Allowed Actions:** Unverified users **CAN**:
+    *   Browse catalog.
+    *   Watch intro videos.
+    *   Update profile.
+7.  **Verification Endpoint:** `GET /auth/verify-link?token=...` verifies the token, updates `emailVerified=true`, and redirects to a "Success" page.
 
 ## Tasks / Subtasks
 
 - [ ] **Backend Implementation (NestJS)**
-  - [ ] **Refactor**: Ensure User model supports `emailVerified` (boolean) and `pendingEmail` (string) for change flows.
-  - [ ] Implement OTP generation logic (6-digit numeric) and storage in Redis with 24h expiration.
-  - [ ] **Security**: Implement rate limiting for `/auth/resend-verification` (3 req/hr) using `ThrottlerModule` or Redis-based guard.
-  - [ ] Create `POST /auth/resend-verification` endpoint.
-  - [ ] Create `POST /auth/verify-email` endpoint (validates OTP, updates DB status, clears Redis).
-  - [ ] **Event**: Emit NATS event `auth.user.registered` with payload: `{ email: string, otp: string, locale: string }`.
+    - [ ] **Data Model**: Ensure `emailVerified` (boolean) exists in User model.
+    - [ ] **Token Logic**: Create `MagicLinkService` to generate signed tokens (15m expiry) and store in Redis.
+    - [ ] **Endpoint**: Create `POST /auth/send-magic-link` (triggered by Reg or "Resend" button).
+    - [ ] **Endpoint**: Create `GET /auth/verify-magic-link` that accepts `token`, verifies it, updates DB, and redirects.
+    - [ ] **Guard**: Implement `VerifiedGuard` to block `Purchase` and `LiveClass` routes for unverified users.
+
 - [ ] **Notification Service**
-  - [ ] Create email template for OTP Verification (Vietnamese primary, English fallback).
-  - [ ] Handle `auth.user.registered` event to send the email via configured SMTP/Mock service.
+    - [ ] Update Email Template: Replace OTP code design with a "Verify Email" button (Magic Link).
+
 - [ ] **Frontend (Web Learner & Mobile)**
-  - [ ] **Component**: Implement `input-otp` from `shadcn/ui` on the verification page (`/verify`).
-  - [ ] Implement "Resend OTP" button with a 60-second cooldown timer + server-side rate limit handling.
-  - [ ] **Error Handling**: Implement specific UI feedback for `OTP_EXPIRED`, `INVALID_OTP`, and `THROTTLED`.
-  - [ ] Ensure the OTP flow works seamlessly across Web and Mobile (unified OTP validity).
+    - [ ] **Banner**: Create `VerificationBanner` component (Global Layout).
+    - [ ] **Interceptors**: Update API clients to handle `403 Unverified` errors by showing a "Verify to continue" modal.
+    - [ ] **Success Page**: Create `/verify/success` page to land on after clicking the link.
+    - [ ] **Mobile**: Configure Deep Linking (Universal Links / App Links) to handle `torii://verify`.
 
 ## Dev Notes
 
-- **OTP Standard:** Use a 6-digit numeric code to maximize compatibility with mobile devices.
-- **Service Communication:** The Identity Service emits the event; the Notification Service is the ONLY service that sends emails.
-- **Persistence:** OTPs reside in Redis ONLY for speed and auto-expiration. The database only stores the final `isEmailVerified` state.
-- **Architecture Compliance:** Follow the `GatewayAuthGuard` patterns established in the server for protected routes.
-
-### Project Structure Notes
-
-- Backend logic: `apps/server/src/modules/auth`.
-- Email templates: `apps/server/src/modules/notifications/templates`.
-- Frontend views: `apps/web-learner/src/app/(auth)/verify`.
-- Shared UI: `packages/ui/src/components/input-otp.tsx`.
+- **One-Click vs Deep Link**: Ensure the email template uses a URL that the backend can redirect intelligently, OR use a Universal Link that opens the App directly on mobile.
+- **Security**: The token should be invalidated immediately after use ("burn after reading").
+- **UX**: "Soft Gate" means we must capture the user's attention *persuasively* (via the Banner) rather than *coercively* (via a Block Screen).
 
 ### References
 
-- [Source: _bmad-output/planning-artifacts/prd.md#US.LEARN.10]
-- [Source: _bmad-output/planning-artifacts/architecture.md#Security & Compliance]
+- [Source: _bmad-output/planning-artifacts/prd.md#US.LEARN.12] (Magic Link)
+- [Source: _bmad-output/planning-artifacts/prd.md#US.LEARN.13] (Soft Gate)
+- [Source: _bmad-output/planning-artifacts/architecture.md#VerifiedGuard]
 - [Source: _bmad-output/planning-artifacts/epics.md#Epic 2]
-
-## Dev Agent Record
-
-### Agent Model Used
-
-Antigravity (Gemini 2.0 Flash)
-
-### Debug Log References
-
-- Unified OTP logic (Link-based flow removed to avoid confusion with mobile deep-linking complexity).
-- Added explicit Rate Limiting tasks.
-- Defined NATS event schema for Notification Service integration.
-
-### Completion Notes List
-
-### File List

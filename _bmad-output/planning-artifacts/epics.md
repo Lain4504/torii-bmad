@@ -33,6 +33,8 @@ Based on the PRD, the system serves **4 user roles** with the following function
 - FR11: Financial records (payment history, gifted courses)
 - FR12: SRS flashcards with cross-platform sync (web ↔ mobile)
 - FR13: Offline learning capability (mobile - 4 hours without internet)
+- FR66: Magic Link Verification (passwordless email verification)
+- FR67: Verification Soft Gate (login allowed before verification, restricted actions)
 
 **AI Cortex Service (Multi-Agent):**
 - FR14: AI Sensei - Contextual Q&A for vocabulary and grammar
@@ -354,11 +356,11 @@ Enable the development team to set up all frontend applications with proper tool
 ---
 
 ### Epic 2: Authentication & User Management
-Enable all users (Learners, Lecturers, Staff, Admin) to securely register, login, and manage their profiles across web and mobile platforms.
+Enable all users to securely register, login (Unverified access allowed), verify via Magic Link, and manage profiles.
 
-**User Outcome:** Users can create accounts, login securely, and manage their personal information.
+**User Outcome:** Users can register frictionless, access content immediately (Soft Gate), and verify email via Magic Link when needed.
 
-**FRs covered:** FR10, FR51  
+**FRs covered:** FR10, FR51, FR66, FR67
 **NFRs covered:** NFR18-NFR20, NFR24-NFR25  
 **Additional Requirements:** ARCH-REQ-6 to ARCH-REQ-14, ENH-REQ-1 to ENH-REQ-6
 

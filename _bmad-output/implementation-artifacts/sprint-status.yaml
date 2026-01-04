@@ -35,8 +35,8 @@ development_status:
 
   # Epic 3: Course Discovery & Enrollment
   epic-3: backlog
-  3-1-course-catalog-web-mobile: backlog
-  3-2-course-detail-page: backlog
+  3-1-course-catalog-web-mobile: ready-for-dev
+  3-2-course-detail-page: ready-for-dev
   3-3-live-class-seat-reservation: backlog
   3-4-vnpay-payment-integration: backlog
   3-5-gifting-code-system: backlog
@@ -56,18 +56,18 @@ development_status:
 
   # Epic 5: Flashcards & SRS Learning
   epic-5: backlog
-  5-1-flashcard-deck-display: backlog
-  5-2-srs-flashcard-practice: backlog
-  5-3-offline-flashcard-practice-mobile: backlog
-  5-4-flashcard-progress-sync: backlog
-  5-5-custom-flashcard-creation: backlog
+  5-1-flashcard-deck-display: ready-for-dev
+  5-2-srs-flashcard-practice: ready-for-dev
+  5-3-offline-flashcard-practice-mobile: ready-for-dev
+  5-4-flashcard-progress-sync: ready-for-dev
+  5-5-custom-flashcard-creation: ready-for-dev
   epic-5-retrospective: optional
 
   # Epic 6: JLPT Practice & Assessment
   epic-6: backlog
-  6-1-exam-center: backlog
-  6-2-take-practice-exam: backlog
-  6-3-auto-grading-results: backlog
+  6-1-exam-center: ready-for-dev
+  6-2-take-practice-exam: ready-for-dev
+  6-3-auto-grading-results: ready-for-dev
   6-4-5-pillar-jlpt-profile: backlog
   epic-6-retrospective: optional
 
@@ -87,20 +87,20 @@ development_status:
 
   # Epic 8: AI Sensei (Learning Assistant)
   epic-8: backlog
-  8-1-contextual-q-a: backlog
-  8-2-grammar-correction: backlog
-  8-3-auto-generate-flashcards: backlog
-  8-4-fastmcp-integration: backlog
+  8-1-contextual-q-a: ready-for-dev
+  8-2-grammar-correction: ready-for-dev
+  8-3-auto-generate-flashcards: ready-for-dev
+  8-4-fastmcp-integration: ready-for-dev
   epic-8-retrospective: optional
 
   # Epic 9: AI Assessment & Grading
   epic-9: backlog
-  9-1-dynamic-mini-test-creation: backlog
-  9-2-draft-grading-workflow-lecturer: backlog
-  9-3-automated-writing-feedback: backlog
-  9-4-jlpt-score-prediction: backlog
-  9-5-smart-exam-generator-academic-staff: backlog
-  9-6-weakness-identification-adaptive-practice: backlog
+  9-1-dynamic-mini-test-creation: ready-for-dev
+  9-2-draft-grading-workflow-lecturer: ready-for-dev
+  9-3-automated-writing-feedback: ready-for-dev
+  9-4-jlpt-score-prediction: ready-for-dev
+  9-5-smart-exam-generator-academic-staff: ready-for-dev
+  9-6-weakness-identification-adaptive-practice: ready-for-dev
   epic-9-retrospective: optional
 
   # Epic 10: Lecturer & Staff Dashboards
@@ -134,7 +134,7 @@ development_status:
   12-2-streak-tracking: backlog
   12-3-badge-system: backlog
   12-4-leaderboards-optional: backlog
-  12-5-push-notifications-mobile: backlog
-  12-6-email-notifications: backlog
+  12-5-push-notifications-mobile: ready-for-dev
+  12-6-email-notifications: ready-for-dev
   12-7-accessibility-features: backlog
   epic-12-retrospective: optional
