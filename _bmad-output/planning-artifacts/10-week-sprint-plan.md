@@ -37,27 +37,27 @@
 
 #### Week 1: Architecture & Infrastructure
 **Backend Team (2 people):**
-- [ ] Finalize Architecture Design Document
-- [ ] Setup Microservices structure (NestJS + Spring Boot)
+- [x] Finalize Architecture Design Document
+- [x] Setup Microservices structure (NestJS + Spring Boot)
 - [ ] Database schema design & review
-- [ ] Setup PostgreSQL + Firebase
-- [ ] Configure NATS messaging
+- [x] Setup PostgreSQL with Prisma
+- [x] Configure NATS messaging
 - [ ] Setup CI/CD pipeline (GitHub Actions)
 - [ ] API Contract definition (OpenAPI/Swagger)
 
 **Frontend Team (1 person):**
-- [ ] Setup Next.js project structure
-- [ ] Design system & component library
-- [ ] Setup Tailwind CSS + shadcn/ui
-- [ ] Authentication flow (JWT)
-- [ ] Layout templates (Dashboard, Course, Live Class)
+- [x] Setup Next.js project structure
+- [x] Design system & component library
+- [x] Setup Tailwind CSS + shadcn/ui
+- [x] Authentication flow (JWT)
+- [x] Layout templates (Dashboard, Course, Live Class)
 
 **Mobile Team (1 person):**
-- [ ] Setup Flutter project
-- [ ] Configure Firebase
-- [ ] Setup state management (Riverpod/Bloc)
-- [ ] Design mobile UI/UX mockups
-- [ ] Setup navigation structure
+- [x] Setup Flutter project
+- [x] Configure libraries
+- [x] Setup state management (Riverpod/Bloc)
+- [x] Design mobile UI/UX mockups
+- [x] Setup navigation structure
 
 **Deliverables:**
 - ✅ Architecture Design Document
@@ -78,17 +78,17 @@
   - Lesson/Module structure
   - Enrollment logic
 - [ ] Setup MinIO for file storage
-- [ ] Setup LiveKit server (WebRTC)
+- [x] Setup LiveKit server (WebRTC)
 
 **Frontend Team:**
-- [ ] Authentication pages (Login, Register)
+- [x] Authentication pages (Login, Register)
 - [ ] User profile management
 - [ ] Course catalog page (Browse & Search)
 - [ ] Course detail page
 
 **Mobile Team:**
-- [ ] Authentication flow
-- [ ] Splash screen & onboarding
+- [x] Authentication flow
+- [x] Splash screen & onboarding
 - [ ] Home screen layout
 - [ ] Course list screen
 
@@ -164,11 +164,11 @@
 
 #### Week 5: WebRTC Integration
 **Backend Team:**
-- [ ] Meet Service (LiveKit integration)
+- [x] Meet Service (LiveKit integration)
   - Room creation & management
   - Participant management
   - Recording functionality
-- [ ] NATS signaling for WebRTC
+- [x] NATS signaling for WebRTC
 - [ ] Attendance tracking
 
 **Frontend Team:**
@@ -342,13 +342,13 @@
 
 ### Recommended Team Structure (4 people)
 
-| Member | Primary Role | Secondary Role | Workload |
-|--------|-------------|----------------|----------|
-| **Member 1** | Backend Lead | DevOps | 40% Backend, 10% DevOps |
-| **Member 2** | Backend Developer | Testing | 40% Backend, 10% Testing |
-| **Member 3** | Frontend Developer | Documentation | 40% Web, 10% Docs |
-| **Member 4** | Mobile Developer | UI/UX | 40% Mobile, 10% Design |
-
+| Member       | Primary Role       | Secondary Role | Workload                 |
+|--------------|--------------------|----------------|--------------------------|
+| **Member 1** | Backend Lead       | DevOps | 40% Backend, 10% DevOps  |
+| **Member 2** | Backend Developer  | Testing | 40% Backend, 10% Testing |
+| **Member 3** | Frontend Developer | Documentation | 40% Web, 10% Docs        |
+| **Member 4** | Mobile Developer   | UI/UX | 40% Mobile, 10% Design   |
+| **Member 5** | Testing            |UI/UX + Docs | 40% Testing, 5% UX, 5% Docs  |
 ### Alternative (3 people - Tight but doable)
 
 | Member | Responsibilities |
